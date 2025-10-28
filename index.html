@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visitor Log System</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏠 Visitor Log System</h1>
+            <p>Track visitors entering and leaving your residence</p>
+        </div>
+
+        <div class="content">
+            <!-- Login Screen -->
+            <div id="login-screen" class="main-content">
+                <div class="auth-container">
+                    <div class="auth-tabs">
+                        <button class="tab-btn active" data-tab="login">Login</button>
+                        <button class="tab-btn" data-tab="register">Register</button>
+                    </div>
+
+                    <!-- Login Form -->
+                    <div id="login-tab" class="auth-form active">
+                        <div class="login-icon">🔐</div>
+                        <h2>Welcome Back</h2>
+                        <div id="login-error" class="error-message"></div>
+                        <div class="form-container">
+                            <div class="form-group">
+                                <label for="username">Username</label>
+                                <input type="text" id="username" placeholder="Enter your username">
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input type="password" id="password" placeholder="Enter your password">
+                            </div>
+                            <button id="login-btn" class="btn">Login</button>
+                        </div>
+                    </div>
+
+                    <!-- Registration Form -->
+                    <div id="register-tab" class="auth-form">
+                        <div class="login-icon">👤</div>
+                        <h2>Create Account</h2>
+                        <div id="register-error" class="error-message"></div>
+                        <div id="register-success" class="success-message"></div>
+                        <div class="form-container">
+                            <div class="form-group">
+                                <label for="reg-username">Username</label>
+                                <input type="text" id="reg-username" placeholder="Choose a username">
+                            </div>
+                            <div class="form-group">
+                                <label for="reg-password">Password</label>
+                                <input type="password" id="reg-password" placeholder="Create a password">
+                            </div>
+                            <div class="form-group">
+                                <label for="reg-fullname">Full Name</label>
+                                <input type="text" id="reg-fullname" placeholder="Enter your full name">
+                            </div>
+                            <div class="form-group">
+                                <label for="reg-email">Email</label>
+                                <input type="email" id="reg-email" placeholder="Enter your email">
+                            </div>
+                            <button id="register-btn" class="btn">Create Account</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Application -->
+            <div id="app-screen" class="hidden">
+                <div class="sidebar">
+                    <div class="user-info">
+                        <div class="user-avatar">👤</div>
+                        <div class="user-details">
+                            <div class="user-name" id="user-display-name">User</div>
+                            <div class="user-role" id="user-role">User</div>
+                        </div>
+                    </div>
+
+                    <div class="nav-section">
+                        <div class="nav-item active" data-target="log-visitor">
+                            <span class="nav-icon">➕</span> Log Visitor
+                        </div>
+                        <div class="nav-item" data-target="view-logs">
+                            <span class="nav-icon">📋</span> View Visitor Logs
+                        </div>
+                        <div class="nav-item" data-target="manage-users">
+                            <span class="nav-icon">👥</span> Manage Users
+                        </div>
+                        <div class="nav-item" data-target="user-profile">
+                            <span class="nav-icon">⚙️</span> My Profile
+                        </div>
+                    </div>
+
+                    <button id="logout-btn" class="btn logout-btn">Logout</button>
+                </div>
+
+                <div class="main-content">
+                    <!-- Log Visitor Form - Centered Version -->
+                    <div id="log-visitor" class="main-content-center">
+                        <div class="center-form-container">
+                            <div class="form-header">
+                                <h2>Log New Visitor</h2>
+                                <p>Record visitor details for security and tracking purposes</p>
+                            </div>
+
+                            <div class="visitor-form-card">
+                                <div id="log-success" class="success-message"></div>
+
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="visitor-name" class="required-field">Visitor Name</label>
+                                        <input type="text" id="visitor-name" placeholder="Enter visitor's full name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="visitor-phone" class="required-field">Phone Number</label>
+                                        <input type="text" id="visitor-phone" placeholder="Enter phone number">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="visitor-email">Email Address</label>
+                                    <input type="email" id="visitor-email" placeholder="Enter email address (optional)">
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="visitor-purpose" class="required-field">Purpose of Visit</label>
+                                        <select id="visitor-purpose">
+                                            <option value="">Select purpose...</option>
+                                            <option value="Personal">Personal Visit</option>
+                                            <option value="Delivery">Delivery</option>
+                                            <option value="Service">Service/Maintenance</option>
+                                            <option value="Business">Business Meeting</option>
+                                            <option value="Interview">Interview</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="host-name" class="required-field">Host Name</label>
+                                        <input type="text" id="host-name" placeholder="Enter host's name">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="visitor-notes">Additional Notes</label>
+                                    <textarea id="visitor-notes"
+                                        placeholder="Any additional information about the visit..." rows="3"></textarea>
+                                </div>
+
+                                <div class="form-actions">
+                                    <button id="log-visitor-btn" class="btn btn-large">Log Visitor Entry</button>
+                                    <button id="clear-form-btn" class="btn btn-large btn-secondary">Clear Form</button>
+                                </div>
+
+                                <div class="quick-actions">
+                                    <button class="quick-action-btn" data-purpose="Delivery">Quick: Delivery</button>
+                                    <button class="quick-action-btn" data-purpose="Service">Quick: Service</button>
+                                    <button class="quick-action-btn" data-purpose="Business">Quick: Business</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- View Visitor Logs -->
+                    <div id="view-logs" class="table-container hidden">
+                        <div class="table-header">
+                            <h2>Visitor Logs</h2>
+                            <div class="table-actions">
+                                <input type="text" id="search-visitors" placeholder="Search visitors..."
+                                    class="search-input">
+                                <button id="refresh-logs" class="btn btn-outline">Refresh</button>
+                            </div>
+                        </div>
+                        <table id="visitor-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Phone</th>
+                                    <th>Purpose</th>
+                                    <th>Host</th>
+                                    <th>Entry Time</th>
+                                    <th>Exit Time</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="visitor-table-body">
+                                <!-- Visitor data will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Manage Users (Admin Only) -->
+                    <div id="manage-users" class="table-container hidden">
+                        <h2>User Management</h2>
+                        <div id="admin-error" class="error-message"></div>
+                        <div class="admin-actions">
+                            <button id="add-user-btn" class="btn">Add New User</button>
+                        </div>
+                        <table id="users-table">
+                            <thead>
+                                <tr>
+                                    <th>Username</th>
+                                    <th>Full Name</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="users-table-body">
+                                <!-- Users data will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- User Profile -->
+                    <div id="user-profile" class="form-container hidden">
+                        <h2>My Profile</h2>
+                        <div id="profile-success" class="success-message"></div>
+                        <div class="form-group">
+                            <label for="profile-username">Username</label>
+                            <input type="text" id="profile-username" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="profile-fullname">Full Name</label>
+                            <input type="text" id="profile-fullname" placeholder="Enter your full name">
+                        </div>
+                        <div class="form-group">
+                            <label for="profile-email">Email</label>
+                            <input type="email" id="profile-email" placeholder="Enter your email">
+                        </div>
+                        <div class="form-group">
+                            <label for="profile-password">New Password</label>
+                            <input type="password" id="profile-password" placeholder="Leave blank to keep current">
+                        </div>
+                        <button id="update-profile-btn" class="btn">Update Profile</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+    <!-- App Scripts -->
+    <script src="scripts/firebase.js"></script>
+    <script src="scripts/auth.js"></script>
+    <script src="scripts/visitors.js"></script>
+    <script src="scripts/app.js"></script>
+</body>
+
+</html>
