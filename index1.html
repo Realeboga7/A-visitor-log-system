@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visitor Log System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(to right, #4a00e0, #8e2de2);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .content {
+            display: flex;
+            min-height: 500px;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-right: 1px solid #eaeaea;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item:hover {
+            background-color: #e9ecef;
+        }
+
+        .nav-item.active {
+            background-color: #4a00e0;
+            color: white;
+        }
+
+        .nav-icon {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+
+        .form-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-weight: 500;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: border 0.3s;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #4a00e0;
+            outline: none;
+        }
+
+        .btn {
+            background: linear-gradient(to right, #4a00e0, #8e2de2);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .table-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eaeaea;
+        }
+
+        th {
+            background-color: #f8f9fa;
+            color: #555;
+            font-weight: 500;
+        }
+
+        tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .status-in {
+            color: #28a745;
+            font-weight: 500;
+        }
+
+        .status-out {
+            color: #dc3545;
+            font-weight: 500;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .login-container {
+            max-width: 400px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .login-icon {
+            font-size: 60px;
+            color: #4a00e0;
+            margin-bottom: 20px;
+        }
+
+        .error-message {
+            color: #dc3545;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .success-message {
+            color: #155724;
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .logout-btn {
+            background: #dc3545;
+            margin-top: 20px;
+        }
+
+        .action-btn {
+            padding: 6px 12px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .checkout-btn {
+            background: #ffc107;
+            color: #212529;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid #eaeaea;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏠 Visitor Log System</h1>
+            <p>Track visitors entering and leaving your residence</p>
+        </div>
+
+        <div class="content">
+            <!-- Login Screen -->
+            <div id="login-screen" class="main-content">
+                <div class="login-container">
+                    <div class="login-icon">🔐</div>
+                    <h2>Login to Access System</h2>
+                    <div id="login-error" class="error-message">Invalid username or password</div>
+                    <div class="form-container">
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" id="username" placeholder="Enter username">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" placeholder="Enter password">
+                        </div>
+                        <button id="login-btn" class="btn">Login</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Application (Initially Hidden) -->
+            <div id="app-screen" class="hidden">
+                <div class="sidebar">
+                    <div class="nav-item active" data-target="log-visitor">
+                        <span class="nav-icon">➕</span> Log Visitor
+                    </div>
+                    <div class="nav-item" data-target="view-logs">
+                        <span class="nav-icon">📋</span> View Visitor Logs
+                    </div>
+                    <div class="nav-item" data-target="manage-users">
+                        <span class="nav-icon">👥</span> Manage Users
+                    </div>
+                    <button id="logout-btn" class="btn logout-btn">Logout</button>
+                </div>
+
+                <div class="main-content">
+                    <!-- Log Visitor Form -->
+                    <div id="log-visitor" class="form-container">
+                        <h2>Log New Visitor</h2>
+                        <div id="log-success" class="success-message">Visitor logged successfully!</div>
+                        <div class="form-group">
+                            <label for="visitor-name">Visitor Name</label>
+                            <input type="text" id="visitor-name" placeholder="Enter visitor's full name">
+                        </div>
+                        <div class="form-group">
+                            <label for="visitor-phone">Phone Number</label>
+                            <input type="text" id="visitor-phone" placeholder="Enter visitor's phone number">
+                        </div>
+                        <div class="form-group">
+                            <label for="visitor-purpose">Purpose of Visit</label>
+                            <select id="visitor-purpose">
+                                <option value="Personal">Personal</option>
+                                <option value="Delivery">Delivery</option>
+                                <option value="Service">Service</option>
+                                <option value="Business">Business</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="host-name">Host Name</label>
+                            <input type="text" id="host-name" placeholder="Enter host's name">
+                        </div>
+                        <button id="log-visitor-btn" class="btn">Log Visitor Entry</button>
+                    </div>
+
+                    <!-- View Visitor Logs -->
+                    <div id="view-logs" class="table-container hidden">
+                        <h2>Visitor Logs</h2>
+                        <table id="visitor-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Phone</th>
+                                    <th>Purpose</th>
+                                    <th>Host</th>
+                                    <th>Entry Time</th>
+                                    <th>Exit Time</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="visitor-table-body">
+                                <!-- Visitor data will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Manage Users -->
+                    <div id="manage-users" class="form-container hidden">
+                        <h2>Manage System Users</h2>
+                        <div id="user-success" class="success-message">User added successfully!</div>
+                        <div class="form-group">
+                            <label for="new-username">Username</label>
+                            <input type="text" id="new-username" placeholder="Enter new username">
+                        </div>
+                        <div class="form-group">
+                            <label for="new-password">Password</label>
+                            <input type="password" id="new-password" placeholder="Enter password">
+                        </div>
+                        <div class="form-group">
+                            <label for="user-role">Role</label>
+                            <select id="user-role">
+                                <option value="admin">Admin</option>
+                                <option value="user">User</option>
+                            </select>
+                        </div>
+                        <button id="add-user-btn" class="btn">Add User</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+    <script>
+        // ========== FIREBASE CONFIGURATION ==========
+        // REPLACE WITH YOUR ACTUAL FIREBASE CONFIG
+        const firebaseConfig = {
+            apiKey: "AIzaSyD7o1ODQkG20H6yuL6S_MsELFt004N1zM0",
+            authDomain: "visitor-log-system.firebaseapp.com",
+            databaseURL: "https://visitor-log-system-default-rtdb.firebaseio.com",
+            projectId: "visitor-log-system",
+            storageBucket: "visitor-log-system.firebasestorage.app",
+            messagingSenderId: "156472292600",
+            appId: "1:156472292600:web:b0f66f5376dda5bda7370d",
+            measurementId: "G-1C01YJ1B8V"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        console.log('🔥 Firebase initialized successfully');
+
+        // ========== AUTHENTICATION ==========
+        class Auth {
+            constructor() {
+                this.currentUser = null;
+                this.defaultUsers = {
+                    'admin': { password: 'admin123', role: 'admin' },
+                    'user': { password: 'user123', role: 'user' }
+                };
+                this.init();
+            }
+
+            init() {
+                if (!localStorage.getItem('users')) {
+                    localStorage.setItem('users', JSON.stringify(this.defaultUsers));
+                }
+            }
+
+            login(username, password) {
+                const users = JSON.parse(localStorage.getItem('users'));
+
+                if (users[username] && users[username].password === password) {
+                    this.currentUser = { username, role: users[username].role };
+                    return true;
+                }
+                return false;
+            }
+
+            logout() {
+                this.currentUser = null;
+            }
+
+            isAdmin() {
+                return this.currentUser && this.currentUser.role === 'admin';
+            }
+
+            addUser(username, password, role) {
+                if (!this.isAdmin()) return false;
+
+                const users = JSON.parse(localStorage.getItem('users'));
+
+                if (users[username]) {
+                    return false;
+                }
+
+                users[username] = { password, role };
+                localStorage.setItem('users', JSON.stringify(users));
+                return true;
+            }
+        }
+
+        // ========== VISITOR MANAGEMENT ==========
+        class VisitorManager {
+            constructor() {
+                this.init();
+            }
+
+            init() {
+                if (!localStorage.getItem('visitorLogs')) {
+                    localStorage.setItem('visitorLogs', JSON.stringify([]));
+                }
+                this.testFirebaseConnection();
+            }
+
+            async testFirebaseConnection() {
+                try {
+                    await database.ref('test').set({
+                        message: 'Connection test',
+                        timestamp: new Date().toISOString()
+                    });
+                    console.log('✅ Firebase connection test successful');
+                } catch (error) {
+                    console.error('❌ Firebase connection test failed:', error);
+                }
+            }
+
+            async logVisitor(visitorData) {
+                const visitorLog = {
+                    id: Date.now(),
+                    ...visitorData,
+                    entryTime: new Date().toLocaleString(),
+                    exitTime: '',
+                    status: 'In'
+                };
+
+                // Save to Firebase
+                try {
+                    await database.ref('visitors').push(visitorLog);
+                    console.log('✅ Visitor saved to Firebase');
+                } catch (error) {
+                    console.error('❌ Error saving to Firebase:', error);
+                }
+
+                // Save to localStorage
+                this.saveToLocalStorage(visitorLog);
+                return visitorLog;
+            }
+
+            async checkoutVisitor(id) {
+                // Update Firebase
+                try {
+                    const visitorsRef = database.ref('visitors');
+                    const snapshot = await visitorsRef.orderByChild('id').equalTo(id).once('value');
+
+                    if (snapshot.exists()) {
+                        const updates = {};
+                        snapshot.forEach(childSnapshot => {
+                            updates[`${childSnapshot.key}/status`] = 'Out';
+                            updates[`${childSnapshot.key}/exitTime`] = new Date().toLocaleString();
+                        });
+                        await visitorsRef.update(updates);
+                        console.log('✅ Visitor checked out in Firebase');
+                    }
+                } catch (error) {
+                    console.error('❌ Error updating Firebase:', error);
+                }
+
+                // Update localStorage
+                return this.checkoutLocalVisitor(id);
+            }
+
+            async loadVisitors() {
+                // Try Firebase first
+                try {
+                    const snapshot = await database.ref('visitors').once('value');
+                    if (snapshot.exists()) {
+                        const firebaseVisitors = [];
+                        snapshot.forEach(childSnapshot => {
+                            firebaseVisitors.push(childSnapshot.val());
+                        });
+                        console.log(`✅ Loaded ${firebaseVisitors.length} visitors from Firebase`);
+                        return firebaseVisitors;
+                    }
+                } catch (error) {
+                    console.error('❌ Error loading from Firebase:', error);
+                }
+
+                // Fallback to localStorage
+                return this.getLocalLogs();
+            }
+
+            saveToLocalStorage(visitorLog) {
+                const logs = this.getLocalLogs();
+                logs.push(visitorLog);
+                localStorage.setItem('visitorLogs', JSON.stringify(logs));
+            }
+
+            checkoutLocalVisitor(id) {
+                const logs = this.getLocalLogs();
+                const logIndex = logs.findIndex(log => log.id === id);
+
+                if (logIndex !== -1) {
+                    logs[logIndex].status = 'Out';
+                    logs[logIndex].exitTime = new Date().toLocaleString();
+                    localStorage.setItem('visitorLogs', JSON.stringify(logs));
+                    return true;
+                }
+                return false;
+            }
+
+            getLocalLogs() {
+                return JSON.parse(localStorage.getItem('visitorLogs')) || [];
+            }
+
+            async renderLogs(tableBody) {
+                const logs = await this.loadVisitors();
+                tableBody.innerHTML = '';
+
+                // Sort by entry time (newest first)
+                logs.sort((a, b) => b.id - a.id);
+
+                logs.forEach(log => {
+                    const row = document.createElement('tr');
+
+                    row.innerHTML = `
+                        <td>${log.name}</td>
+                        <td>${log.phone}</td>
+                        <td>${log.purpose}</td>
+                        <td>${log.host}</td>
+                        <td>${log.entryTime}</td>
+                        <td>${log.exitTime || '-'}</td>
+                        <td class="status-${log.status.toLowerCase()}">${log.status}</td>
+                        <td>
+                            ${log.status === 'In' ?
+                            `<button class="action-btn checkout-btn" data-id="${log.id}">Check Out</button>` :
+                            'Completed'
+                        }
+                        </td>
+                    `;
+
+                    tableBody.appendChild(row);
+                });
+
+                // Bind checkout buttons
+                this.bindCheckoutButtons();
+            }
+
+            bindCheckoutButtons() {
+                document.querySelectorAll('.checkout-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const id = parseInt(e.target.getAttribute('data-id'));
+                        this.checkoutVisitor(id).then(() => {
+                            this.renderLogs(document.getElementById('visitor-table-body'));
+                        });
+                    });
+                });
+            }
+        }
+
+        // ========== MAIN APPLICATION ==========
+        class App {
+            constructor() {
+                this.auth = new Auth();
+                this.visitorManager = new VisitorManager();
+                this.init();
+            }
+
+            init() {
+                this.bindEvents();
+
+                if (this.auth.currentUser) {
+                    this.showAppScreen();
+                } else {
+                    this.showLoginScreen();
+                }
+            }
+
+            bindEvents() {
+                // Login
+                document.getElementById('login-btn').addEventListener('click', () => {
+                    this.handleLogin();
+                });
+
+                // Logout
+                document.getElementById('logout-btn').addEventListener('click', () => {
+                    this.handleLogout();
+                });
+
+                // Navigation
+                document.querySelectorAll('.nav-item').forEach(item => {
+                    item.addEventListener('click', (e) => {
+                        this.handleNavigation(e.currentTarget);
+                    });
+                });
+
+                // Log visitor
+                document.getElementById('log-visitor-btn').addEventListener('click', () => {
+                    this.handleLogVisitor();
+                });
+
+                // Add user
+                document.getElementById('add-user-btn').addEventListener('click', () => {
+                    this.handleAddUser();
+                });
+
+                // Enter key for login
+                document.getElementById('password').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        this.handleLogin();
+                    }
+                });
+            }
+
+            handleLogin() {
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+                const loginError = document.getElementById('login-error');
+
+                if (this.auth.login(username, password)) {
+                    this.showAppScreen();
+                    loginError.style.display = 'none';
+                } else {
+                    loginError.style.display = 'block';
+                }
+            }
+
+            handleLogout() {
+                this.auth.logout();
+                this.showLoginScreen();
+                this.clearLoginForm();
+            }
+
+            handleNavigation(navItem) {
+                document.querySelectorAll('.nav-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                navItem.classList.add('active');
+
+                const target = navItem.getAttribute('data-target');
+                document.querySelectorAll('.main-content > div').forEach(section => {
+                    if (section.id === target) {
+                        section.classList.remove('hidden');
+                        if (target === 'view-logs') {
+                            this.visitorManager.renderLogs(document.getElementById('visitor-table-body'));
+                        }
+                    } else {
+                        section.classList.add('hidden');
+                    }
+                });
+            }
+
+            async handleLogVisitor() {
+                const name = document.getElementById('visitor-name').value;
+                const phone = document.getElementById('visitor-phone').value;
+                const purpose = document.getElementById('visitor-purpose').value;
+                const host = document.getElementById('host-name').value;
+
+                if (!name || !phone || !host) {
+                    alert('Please fill in all required fields');
+                    return;
+                }
+
+                await this.visitorManager.logVisitor({ name, phone, purpose, host });
+
+                // Show success
+                const logSuccess = document.getElementById('log-success');
+                logSuccess.style.display = 'block';
+                setTimeout(() => {
+                    logSuccess.style.display = 'none';
+                }, 3000);
+
+                // Clear form
+                this.clearVisitorForm();
+            }
+
+            handleAddUser() {
+                if (!this.auth.isAdmin()) {
+                    alert('Only administrators can add users');
+                    return;
+                }
+
+                const username = document.getElementById('new-username').value;
+                const password = document.getElementById('new-password').value;
+                const role = document.getElementById('user-role').value;
+
+                if (!username || !password) {
+                    alert('Please fill in all fields');
+                    return;
+                }
+
+                if (this.auth.addUser(username, password, role)) {
+                    const userSuccess = document.getElementById('user-success');
+                    userSuccess.style.display = 'block';
+                    setTimeout(() => {
+                        userSuccess.style.display = 'none';
+                    }, 3000);
+                    this.clearUserForm();
+                } else {
+                    alert('Username already exists');
+                }
+            }
+
+            showLoginScreen() {
+                document.getElementById('login-screen').classList.remove('hidden');
+                document.getElementById('app-screen').classList.add('hidden');
+            }
+
+            showAppScreen() {
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('app-screen').classList.remove('hidden');
+                this.visitorManager.renderLogs(document.getElementById('visitor-table-body'));
+            }
+
+            clearLoginForm() {
+                document.getElementById('username').value = '';
+                document.getElementById('password').value = '';
+            }
+
+            clearVisitorForm() {
+                document.getElementById('visitor-name').value = '';
+                document.getElementById('visitor-phone').value = '';
+                document.getElementById('host-name').value = '';
+            }
+
+            clearUserForm() {
+                document.getElementById('new-username').value = '';
+                document.getElementById('new-password').value = '';
+            }
+        }
+
+        // ========== INITIALIZE APP ==========
+        // Wait for DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log('🚀 Starting Visitor Log System...');
+            window.app = new App();
+        });
+    </script>
+</body>
+
+</html>
